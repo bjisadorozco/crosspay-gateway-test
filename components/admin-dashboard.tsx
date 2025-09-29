@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -24,6 +24,25 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
   const [searchTerm, setSearchTerm] = useState("")
   const [currencyFilter, setCurrencyFilter] = useState("all")
   const [isLoggingOut, setIsLoggingOut] = useState(false)
+  const [clientTransactions, setClientTransactions] = useState<Transaction[]>([])
+
+  // Cargar transacciones guardadas en el navegador y fusionarlas con las del servidor
+  React.useEffect(() => {
+    try {
+      const raw = typeof window !== "undefined" ? localStorage.getItem("transactions") : null
+      const fromClient: Transaction[] = raw ? JSON.parse(raw) : []
+      setClientTransactions(fromClient)
+    } catch {
+      setClientTransactions([])
+    }
+  }, [])
+
+  const mergedTransactions: Transaction[] = React.useMemo(() => {
+    const map = new Map<string, Transaction>()
+    for (const t of transactions) map.set(t.id, t)
+    for (const t of clientTransactions) map.set(t.id, t)
+    return Array.from(map.values()).sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1))
+  }, [transactions, clientTransactions])
 
   const headers = [
     "ID",
@@ -51,7 +70,7 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
   }
 
   // Filter transactions
-  const filteredTransactions = transactions.filter((transaction) => {
+  const filteredTransactions = mergedTransactions.filter((transaction) => {
     const matchesSearch =
       transaction.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||

@@ -103,6 +103,30 @@ export function PaymentForm() {
       console.log("[v0] API Response:", result)
 
       if (response.ok) {
+        try {
+          const localListRaw = typeof window !== "undefined" ? localStorage.getItem("transactions") : null
+          const localList: any[] = localListRaw ? JSON.parse(localListRaw) : []
+          const maskedCard = `****-****-****-${formData.cardNumber.replace(/\s/g, "").slice(-4)}`
+          const clientTransaction = {
+            id: result.id,
+            currency: formData.currency,
+            amount: Number.parseFloat(formData.amount),
+            description: formData.description.trim(),
+            name: formData.name.trim(),
+            documentType: formData.documentType,
+            documentNumber: formData.documentNumber.trim(),
+            cardNumber: maskedCard,
+            expiryDate: formData.expiryDate,
+            securityCode: "***",
+            createdAt: new Date().toISOString(),
+            status: "completed",
+          }
+          localList.push(clientTransaction)
+          if (typeof window !== "undefined") {
+            localStorage.setItem("transactions", JSON.stringify(localList))
+          }
+        } catch { }
+
         setNotification({
           type: "success",
           message: "Pago procesado exitosamente. Redirigiendo...",
