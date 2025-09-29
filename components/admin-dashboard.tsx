@@ -141,8 +141,10 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
               Bienvenido, <span className="font-medium text-foreground">{user.username}</span>
             </span>
             <Button variant="outline" size="sm" onClick={handleLogout} disabled={isLoggingOut}>
-              <LogOut className="w-4 h-4 mr-2" />
-              {isLoggingOut ? "Cerrando..." : "Cerrar Sesión"}
+              <LogOut className="w-4 h-4 mr-0 sm:mr-2" />
+              <span className="hidden sm:inline">
+                {isLoggingOut ? "Cerrando..." : "Cerrar Sesión"}
+              </span>
             </Button>
           </div>
         </div>
