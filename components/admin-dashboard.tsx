@@ -81,11 +81,11 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
     return matchesSearch && matchesCurrency
   })
 
-  // Calculate statistics
-  const totalTransactions = transactions.length
-  const totalAmount = transactions.reduce((sum, t) => sum + t.amount, 0)
-  const copTransactions = transactions.filter((t) => t.currency === "COP")
-  const usdTransactions = transactions.filter((t) => t.currency === "USD")
+  // Calcular estadísticas basadas en la lista fusionada
+  const totalTransactions = mergedTransactions.length
+  const totalAmount = mergedTransactions.reduce((sum, t) => sum + t.amount, 0)
+  const copTransactions = mergedTransactions.filter((t) => t.currency === "COP")
+  const usdTransactions = mergedTransactions.filter((t) => t.currency === "USD")
 
   const formatCurrency = (amount: number, currency: string) => {
     return new Intl.NumberFormat("es-CO", {
