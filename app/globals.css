@@ -1,0 +1,103 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --alpha: transparent;
+  --bg-ppal: #F7F7F7;
+  --bg-sec: #FFFFFF;
+  --accent1: #5036f6;
+  --accent2: #e937b1;
+  --accent3: #7B3AEC;
+  --titles: #1E1A30;
+  --pg: #5E5E5E;
+  --icons: #999999;
+  --shadow: rgba(30, 26, 48, 0.1);
+  --line: #E6E6E6;
+
+  /* mapear a tokens usados por la UI */
+  --background: var(--bg-ppal);
+  --foreground: var(--titles);
+  --card: var(--bg-sec);
+  --card-foreground: var(--titles);
+  --popover: var(--bg-sec);
+  --popover-foreground: var(--titles);
+  --primary: var(--accent1);
+  --primary-foreground: #ffffff;
+  --secondary: var(--bg-ppal);
+  --secondary-foreground: var(--titles);
+  --muted: var(--bg-ppal);
+  --muted-foreground: var(--pg);
+  --accent: var(--accent2);
+  --accent-foreground: #ffffff;
+  --destructive: #E53935;
+  --destructive-foreground: #ffffff;
+  --border: var(--line);
+  --input: var(--line);
+  --ring: var(--accent3);
+  --chart-1: var(--accent1);
+  --chart-2: var(--accent2);
+  --chart-3: var(--accent3);
+  --chart-4: #9ac10c;
+  --chart-5: #1E1A30;
+  --radius: 0.625rem;
+  --sidebar: var(--bg-sec);
+  --sidebar-foreground: var(--titles);
+  --sidebar-primary: var(--accent1);
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: var(--bg-ppal);
+  --sidebar-accent-foreground: var(--titles);
+  --sidebar-border: var(--line);
+  --sidebar-ring: var(--accent3);
+}
+
+@theme inline {
+  /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'DM Sans', ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+  }
+}
