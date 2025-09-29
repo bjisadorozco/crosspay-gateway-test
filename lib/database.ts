@@ -1,5 +1,4 @@
-import { promises as fs } from "fs"
-import path from "path"
+import { supabase } from "@/lib/supabase"
 
 export interface Transaction {
   id: string
@@ -9,9 +8,9 @@ export interface Transaction {
   name: string
   documentType: string
   documentNumber: string
-  cardNumber: string // Only last 4 digits stored
+  cardNumber: string
   expiryDate: string
-  securityCode: string // Not stored in real implementation
+  securityCode: string
   createdAt: string
   status: "completed" | "pending" | "failed"
 }
@@ -19,54 +18,68 @@ export interface Transaction {
 export interface User {
   id: string
   username: string
-  password: string // In real app, this would be hashed
+  password: string
   role: "admin"
   createdAt: string
 }
 
-// 🔹 Arrays en memoria (se reinician en cada redeploy o reinicio del serverless)
-let transactions: Transaction[] = []
-let users: User[] = [
-  {
-    id: "admin-1",
-    username: "admin",
-    password: "admin123", // En producción debería estar hasheado
-    role: "admin",
-    createdAt: new Date().toISOString(),
-  },
-]
-
-// Transaction operations
 export async function saveTransaction(
   transactionData: Omit<Transaction, "id" | "createdAt" | "status">,
 ): Promise<Transaction> {
   const transaction: Transaction = {
     ...transactionData,
     id: `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-    cardNumber: `****-****-****-${transactionData.cardNumber.slice(-4)}`, // Mask card number
-    securityCode: "***", // Nunca guardar el CVV real
+    cardNumber: `****-****-****-${transactionData.cardNumber.slice(-4)}`,
+    securityCode: "***",
     createdAt: new Date().toISOString(),
-    status: "completed", // Simulación de pago exitoso
+    status: "completed",
   }
 
-  transactions.push(transaction)
+  const { error } = await supabase.from("transactions").insert(transaction)
+  if (error) {
+    throw error
+  }
   return transaction
 }
 
 export async function getTransactions(): Promise<Transaction[]> {
-  return transactions
+  const { data, error } = await supabase
+    .from("transactions")
+    .select("*")
+    .order("createdAt", { ascending: false })
+
+  if (error) {
+    throw error
+  }
+  return (data as Transaction[]) || []
 }
 
 export async function getTransactionById(id: string): Promise<Transaction | null> {
-  return transactions.find((t) => t.id === id) || null
+  const { data, error } = await supabase.from("transactions").select("*").eq("id", id).single()
+  if (error) {
+    return null
+  }
+  return (data as Transaction) || null
 }
 
-// User operations
 export async function validateUser(username: string, password: string): Promise<User | null> {
-  const user = users.find((u) => u.username === username && u.password === password)
-  return user || null
+  const { data, error } = await supabase
+    .from("users")
+    .select("*")
+    .eq("username", username)
+    .eq("password", password)
+    .single()
+
+  if (error) {
+    return null
+  }
+  return data as User
 }
 
 export async function getUsers(): Promise<User[]> {
-  return users
+  const { data, error } = await supabase.from("users").select("*").order("createdAt", { ascending: false })
+  if (error) {
+    throw error
+  }
+  return (data as User[]) || []
 }
