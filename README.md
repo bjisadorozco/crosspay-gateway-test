@@ -65,8 +65,8 @@ Una aplicación fullstack de pasarela de pagos desarrollada con Next.js, que inc
 
 1. **Clonar el repositorio**
 \`\`\`bash
-git clone <repository-url>
-cd crosspay-gateway
+git clone https://github.com/bjisadorozco/crosspay-gateway-test.git
+cd crosspay-gateway-test
 \`\`\`
 
 2. **Instalar dependencias**
