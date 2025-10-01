@@ -90,12 +90,19 @@ export function PaymentForm() {
 
     try {
       console.log("[v0] Sending payment data:", formData)
+      
+      // Obtener la URL base de la API desde la configuración
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+      const endpoint = `${apiUrl}/transactions`;
+      
+      console.log("[v0] Sending request to:", endpoint);
 
-      const response = await fetch("/api/transactions", {
+      const response = await fetch(endpoint, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "same-origin",
         body: JSON.stringify(formData),
       })
 
@@ -158,9 +165,12 @@ export function PaymentForm() {
     <Card className="w-full">
       {notification.type && (
         <div
-          className={`fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg flex items-center gap-3 ${notification.type === "success" ? "bg-green-500 text-white" : "bg-red-500 text-white"
-            }`}
-        >
+          className={`fixed top-4 z-50 p-4 rounded-lg shadow-lg flex items-center gap-3
+                    text-sm sm:text-base
+                    w-[90%] max-w-sm left-1/2 -translate-x-1/2 
+                    sm:w-auto sm:max-w-none sm:right-4 sm:left-auto sm:translate-x-0
+                    ${notification.type === "success" ? "bg-green-500 text-white" : "bg-red-500 text-white"}`}
+        >      
           {notification.type === "success" ? <CheckCircle className="w-5 h-5" /> : <XCircle className="w-5 h-5" />}
           <span>{notification.message}</span>
           <button

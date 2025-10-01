@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
-import { getAuthUser } from "@/lib/auth"
-import { getTransactions } from "@/lib/database"
+import { getAuthUser } from "@/src/lib/auth"
+import { getTransactions } from "@/src/lib/database"
 import { AdminDashboard } from "@/components/admin-dashboard"
 
 export default async function AdminPage() {

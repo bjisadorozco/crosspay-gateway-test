@@ -11,8 +11,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Logo } from "@/components/ui/logo"
 import { LogOut, Search, Filter, Download, CreditCard, DollarSign, TrendingUp } from "lucide-react"
 import Link from "next/link"
-import type { Transaction } from "@/lib/database"
-import type { AuthUser } from "@/lib/auth"
+import type { Transaction } from "@/src/lib/database"
+import type { AuthUser } from "@/src/lib/auth"
 
 interface AdminDashboardProps {
   user: AuthUser
