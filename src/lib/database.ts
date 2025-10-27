@@ -226,27 +226,28 @@ export async function validateUser(username: string, password: string): Promise<
     
     const { data: userData, error: userError } = await supabase
       .from("users")
-      .select("*")
+      .select("id, username, password, role, createdAt")
       .eq("username", username.trim())
-      .single()
 
     if (userError) {
-      if (userError.code === 'PGRST116' || userError.message.includes('No rows found')) {
-        console.log(`ℹ️ Usuario no encontrado: ${username}`)
-        return null
-      }
-      
-      console.error('❌ Error al buscar usuario:', userError)
+      console.error('❌ Error al buscar usuario:', {
+        code: userError.code,
+        message: userError.message,
+        details: userError.details,
+        hint: userError.hint
+      })
       return null
     }
 
-    if (!userData) {
-      console.log(`ℹ️ No hay datos para: ${username}`)
+    if (!userData || userData.length === 0) {
+      console.log(`ℹ️ Usuario no encontrado: ${username}`)
       return null
     }
+
+    const user = userData[0]
 
     // Verificar contraseña (en producción usa bcrypt)
-    if (userData.password !== password) {
+    if (user.password !== password) {
       console.log('❌ Contraseña incorrecta')
       return null
     }
@@ -254,11 +255,11 @@ export async function validateUser(username: string, password: string): Promise<
     console.log(`✅ Usuario autenticado: ${username}`)
     
     return {
-      id: userData.id || '',
-      username: userData.username || '',
+      id: user.id || '',
+      username: user.username || '',
       password: '',
-      role: userData.role === 'admin' ? 'admin' as const : 'admin',
-      createdAt: userData.createdAt || new Date().toISOString(),
+      role: user.role === 'admin' ? 'admin' as const : 'admin',
+      createdAt: user.createdAt || new Date().toISOString(),
     }
     
   } catch (error) {
@@ -275,7 +276,7 @@ export async function getUsers(): Promise<User[]> {
     
     const { data, error } = await supabase
       .from("users")
-      .select("*")
+      .select("id, username, role, createdAt")
       .order("createdAt", { ascending: false })
 
     if (error) {
