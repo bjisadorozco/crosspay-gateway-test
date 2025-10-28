@@ -91,18 +91,12 @@ export function PaymentForm() {
     try {
       console.log("[v0] Sending payment data:", formData)
       
-      // Obtener la URL base de la API desde la configuración
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
-      const endpoint = `${apiUrl}/transactions`;
-      
-      console.log("[v0] Sending request to:", endpoint);
-
-      const response = await fetch(endpoint, {
+      const response = await fetch("/api/transactions", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "same-origin",
+
         body: JSON.stringify(formData),
       })
 
