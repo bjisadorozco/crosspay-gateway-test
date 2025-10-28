@@ -45,7 +45,6 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
   }, [transactions, clientTransactions])
 
   const headers = [
-    "ID",
     "Divisa",
     "Monto",
     "Descripción",
@@ -73,8 +72,7 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
   const filteredTransactions = mergedTransactions.filter((transaction) => {
     const matchesSearch =
       transaction.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      transaction.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      transaction.id.toLowerCase().includes(searchTerm.toLowerCase())
+      transaction.description.toLowerCase().includes(searchTerm.toLowerCase())
 
     const matchesCurrency = currencyFilter === "all" || transaction.currency === currencyFilter
 
@@ -115,7 +113,6 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
 
   const handleExport = () => {
     const rows = filteredTransactions.map((t) => [
-      t.id,
       t.currency,
       // Monto sin formato para que Excel lo reconozca como número
       t.amount,
@@ -252,7 +249,7 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
               <div className="relative flex-1">
                 <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                 <Input
-                  placeholder="Buscar por nombre, descripción o ID..."
+                  placeholder="Buscar por nombre o descripción..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   className="pl-10"
@@ -282,7 +279,6 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>ID</TableHead>
                       <TableHead>Divisa</TableHead>
                       <TableHead>Monto</TableHead>
                       <TableHead>Descripción</TableHead>
@@ -295,7 +291,6 @@ export function AdminDashboard({ user, transactions }: AdminDashboardProps) {
                   <TableBody>
                     {filteredTransactions.map((transaction) => (
                       <TableRow key={transaction.id}>
-                        <TableCell className="font-mono text-xs">{transaction.id.substring(0, 12)}...</TableCell>
                         <TableCell>
                           <Badge variant="outline">{transaction.currency}</Badge>
                         </TableCell>
